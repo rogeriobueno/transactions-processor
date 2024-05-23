@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+storage-files:
+  file-path-todo: ${FILE_PATH_TODO:storage/todo}
+  file-path-done: ${FILE_PATH_DONE:storage/done}
+  max-files-execution: ${MAX_FILES_EXECUTION:5}
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: "transaction-processor"
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${DB_PORT:3306}/transactions
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:my_password} #CHANGE - SECURITY PROBLEM
+
+  flyway:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${DB_PORT:3306}
+    schemas: transactions
+    user: ${DB_USER:root}
+    password: ${DB_PASSWORD:my_password} #CHANGE - SECURITY PROBLEM
+
+  jpa:
+    show-sql: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 500
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

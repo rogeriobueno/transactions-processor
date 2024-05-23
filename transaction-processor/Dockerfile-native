@@ -1,0 +1,27 @@
+# First stage: JDK with GraalVM
+FROM ghcr.io/graalvm/graalvm-ce:ol8-java17 as build
+# Update package lists and Install Maven
+RUN microdnf update -y && \
+microdnf install -y maven gcc glibc-devel zlib-devel libstdc++-devel gcc-c++ && \
+microdnf clean all
+
+WORKDIR /app
+
+COPY pom.xml .
+# Download the dependencies
+RUN mvn -DskipTests dependency:go-offline -B
+# Copy the source code
+COPY src ./src
+#Run the native image compilation
+#REMOVE THE WARNINGs FROM OAT
+RUN mvn -DskipTests -Pnative native:compile
+
+# Use a minimal base image for the final image
+FROM debian:stretch-slim
+WORKDIR /app
+# Copy the native image to the final image
+COPY --from=build  /app/target/transaction-processor /application
+# Define the port that the application exposes
+EXPOSE 8080
+# Command to start the application
+CMD ["/application"]

@@ -1,0 +1,64 @@
+version: '3.9'
+
+services:
+
+  transaction-processor:
+    container_name: transaction-processor
+    image: rogerbu/transaction-processor:latest
+    build:
+      context: ../transaction-processor
+      dockerfile: Dockerfile
+    #dockerfile: Dockerfile-native                # NEED TO IMPROVE THE BUILD
+    #image: rogerbu/transaction-processor:latest  # DOCKER HUB - native
+    environment:
+      MYSQL_HOST: database-transactions
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: my_password
+      FILE_PATH_TODO: /storage/todo
+      FILE_PATH_DONE: /storage/done
+    ports:
+      - "8080:8080"
+    networks:
+      - my-net
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      database-transactions:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    volumes:
+      - transaction-processor-vol:/storage
+
+  database-transactions:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: 'transactions'
+      MYSQL_USER: "my_user"
+      MYSQL_PASSWORD: 'my_password'
+      MYSQL_ROOT_PASSWORD: 'my_password'
+    ports:
+      - "3306:3306"
+    networks:
+      - my-net
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 10s
+      retries: 10
+    volumes:
+      - database-transactions-vol:/var/lib/mysql
+
+volumes:
+  database-transactions-vol:
+  transaction-processor-vol:
+
+networks:
+  my-net:
+    driver: bridge

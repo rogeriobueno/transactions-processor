@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transactions xmlns:x="http://www.example.com/transactions">
+    <Transaction amount="558.3507317192206" x:currency="GBP" x:timestamp="2024-05-08T02:23:11.938755749Z">
+        <creditCard>
+            <number>1234-5678-1234-207</number>
+            <name>David</name>
+            <expiryDate>12/24</expiryDate>
+            <cvv/>
+        </creditCard>
+        <recipient>
+            <name>Charlie</name>
+            <email/>
+            <phone>+1234567890</phone>
+        </recipient>
+    </Transaction>
+    <Transaction amount="558.3507317192206" x:currency="GBP" x:timestamp="2024-05-08T02:24:51.901529839Z">
+        <creditCard>
+            <number>1234-5678-1234-7446</number>
+            <name>Frank</name>
+            <expiryDate>12/24</expiryDate>
+            <cvv/>
+        </creditCard>
+        <recipient>
+            <name>Alice</name>
+            <email/>
+            <phone>+1234567890</phone>
+        </recipient>
+    </Transaction>
+    <Transaction amount="748.9139853138893" x:currency="CHF" x:timestamp="2024-05-08T02:26:31.923370014Z">
+        <creditCard>
+            <number>1234-5678-1234-9736</number>
+            <name>Grace</name>
+            <expiryDate>12/24</expiryDate>
+            <cvv/>
+        </creditCard>
+        <recipient>
+            <name>Bob</name>
+            <email/>
+            <phone>+1234567890</phone>
+        </recipient>
+    </Transaction>
+</transactions>

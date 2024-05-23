@@ -1,0 +1,39 @@
+server:
+  port: 8181
+
+storage-files:
+  file-path-todo: storage/todo
+  file-path-done: storage/done
+  max-files-execution: 5
+
+spring:
+  profiles:
+    active: test
+  application:
+    name: "transaction-processor"
+
+  datasource:
+    url: jdbc:h2:mem:game-db-test
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+
+  flyway:
+    enabled: false
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 2
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
